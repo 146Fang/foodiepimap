@@ -1,18 +1,12 @@
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import './globals.css';
-import { LocaleProvider } from '@/contexts/LocaleContext';
-import { Header } from '@/components/Header';
-import { BottomNavigation } from '@/components/BottomNavigation';
-import { FirebaseErrorBoundary } from '@/components/FirebaseErrorBoundary';
+import type { Metadata } from "next";
+import { Inter } from "next/font/google"; // 換成穩定的 Inter 字體
+import "./globals.css";
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'FoodiePi Map - Web3 Restaurant Discovery',
-  description: 'Discover amazing restaurants powered by Web3. Earn rewards, make payments with Pi Network, and explore the foodie community.',
-  viewport: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no',
-  themeColor: '#9333ea',
+  title: "FoodiePi Map - 食尚派地圖",
+  description: "Web3 餐廳搜尋與獎勵平台",
 };
 
 export default function RootLayout({
@@ -21,19 +15,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="zh-TW">
       <body className={inter.className}>
-        <FirebaseErrorBoundary>
-          <LocaleProvider>
-            <div className="flex flex-col min-h-screen">
-              <Header />
-              <main className="flex-1 pb-20">
-                {children}
-              </main>
-              <BottomNavigation />
-            </div>
-          </LocaleProvider>
-        </FirebaseErrorBoundary>
+        {children}
       </body>
     </html>
   );
