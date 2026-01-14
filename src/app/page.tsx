@@ -1,38 +1,37 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-// 這裡必須加花括號 { }
 import { Header } from '@/components/Header'; 
 import { AppSearchProvider } from '@/contexts/AppSearch'; 
-// RestaurantMap 通常也需要花括號，請一併修正
 import { RestaurantMap } from '@/components/RestaurantMap'; 
 import { getAllRestaurants, searchRestaurants, Restaurant } from '@/services/restaurantService';
 
 export default function Home() {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
 
+  // 1. 修復初始化抓取
   useEffect(() => {
-    // 建立一個內部非同步函數來處理 Promise
     const loadData = async () => {
-      const data = await getAllRestaurants(); // 等待資料抓取完成
-      setRestaurants(data); // 抓到資料後再更新 State
+      const data = await getAllRestaurants();
+      setRestaurants(data);
     };
-    
     loadData();
   }, []);
 
-  const handleSearch = (term: string) => {
-    setRestaurants(searchRestaurants(term));
+  // 2. 修復搜尋邏輯 (加上 async/await)
+  const handleSearch = async (term: string) => {
+    const results = await searchRestaurants(term);
+    setRestaurants(results);
   };
 
   return (
     <AppSearchProvider onSearch={handleSearch}>
-      <main className="min-h-screen">
+      <div className="min-h-screen flex flex-col">
         <Header />
-        <div className="p-4">
+        <main className="flex-1 relative">
           <RestaurantMap restaurants={restaurants} />
-        </div>
-      </main>
+        </main>
+      </div>
     </AppSearchProvider>
   );
 }
