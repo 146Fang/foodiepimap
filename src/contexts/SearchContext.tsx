@@ -7,19 +7,19 @@ interface SearchContextType {
   setSearchTerm: (term: string) => void;
 }
 
-// 確保這裡只有一個 export const SearchContext
+// 這裡只定義一次
 export const SearchContext = createContext<SearchContextType | undefined>(undefined);
 
 export function SearchProvider({ children, onSearch }: { children: React.ReactNode; onSearch: (term: string) => void }) {
   const [searchTerm, setSearchTerm] = useState('');
 
-  const handleSetSearchTerm = (term: string) => {
+  const updateSearch = (term: string) => {
     setSearchTerm(term);
     onSearch(term);
   };
 
   return (
-    <SearchContext.Provider value={{ searchTerm, setSetSearchTerm: handleSetSearchTerm } as any}>
+    <SearchContext.Provider value={{ searchTerm, setSearchTerm: updateSearch }}>
       {children}
     </SearchContext.Provider>
   );
@@ -27,7 +27,7 @@ export function SearchProvider({ children, onSearch }: { children: React.ReactNo
 
 export const useSearch = () => {
   const context = useContext(SearchContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error('useSearch must be used within a SearchProvider');
   }
   return context;
