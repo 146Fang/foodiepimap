@@ -7,29 +7,26 @@ interface SearchContextType {
   setSearchTerm: (term: string) => void;
 }
 
-// 1. 這裡的名字改成 GlobalSearchData，避免跟檔案名稱或 Provider 撞名
-export const GlobalSearchData = createContext<SearchContextType | undefined>(undefined);
+// 我們把變數名字改掉，避開「SearchContext」這個關鍵字
+export const MySearchDataStore = createContext<SearchContextType | undefined>(undefined);
 
 export function SearchProvider({ children, onSearch }: { children: React.ReactNode; onSearch: (term: string) => void }) {
   const [searchTerm, setSearchTerm] = useState('');
 
-  const handleUpdate = (term: string) => {
+  const updateSearch = (term: string) => {
     setSearchTerm(term);
     onSearch(term);
   };
 
   return (
-    <GlobalSearchData.Provider value={{ searchTerm, setSearchTerm: handleUpdate }}>
+    <MySearchDataStore.Provider value={{ searchTerm, setSearchTerm: updateSearch }}>
       {children}
-    </GlobalSearchData.Provider>
+    </MySearchDataStore.Provider>
   );
 }
 
-// 2. 提供一個簡單的 Hook 給別的檔案用
 export const useSearch = () => {
-  const context = useContext(GlobalSearchData);
-  if (!context) {
-    throw new Error('useSearch must be used within a SearchProvider');
-  }
+  const context = useContext(MySearchDataStore);
+  if (!context) throw new Error('useSearch must be used within a SearchProvider');
   return context;
 };
