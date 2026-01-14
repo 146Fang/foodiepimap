@@ -1,5 +1,4 @@
 'use client';
-
 import React, { createContext, useContext, useState } from 'react';
 
 interface SearchContextType {
@@ -7,8 +6,8 @@ interface SearchContextType {
   setSearchTerm: (term: string) => void;
 }
 
-// 我們把變數名字改掉，避開「SearchContext」這個關鍵字
-export const MySearchDataStore = createContext<SearchContextType | undefined>(undefined);
+// 關鍵：這裡只定義「一個」變數
+export const SearchContext = createContext<SearchContextType | undefined>(undefined);
 
 export function SearchProvider({ children, onSearch }: { children: React.ReactNode; onSearch: (term: string) => void }) {
   const [searchTerm, setSearchTerm] = useState('');
@@ -19,14 +18,14 @@ export function SearchProvider({ children, onSearch }: { children: React.ReactNo
   };
 
   return (
-    <MySearchDataStore.Provider value={{ searchTerm, setSearchTerm: updateSearch }}>
+    <SearchContext.Provider value={{ searchTerm, setSearchTerm: updateSearch }}>
       {children}
-    </MySearchDataStore.Provider>
+    </SearchContext.Provider>
   );
 }
 
 export const useSearch = () => {
-  const context = useContext(MySearchDataStore);
+  const context = useContext(SearchContext);
   if (!context) throw new Error('useSearch must be used within a SearchProvider');
   return context;
 };
