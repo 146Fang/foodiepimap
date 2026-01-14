@@ -1,80 +1,32 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { PiAuthProvider } from '@/components/PiAuthProvider';
-import { usePiAuth } from '@/hooks/usePiAuth';
-import { RestaurantMap } from '@/components/RestaurantMap';
+import React from 'react';
+import Header from '@/components/Header';
+import { AppSearchProvider } from '@/contexts/AppSearch'; // 確保這裡只有一行
+import RestaurantMap from '@/components/RestaurantMap';
 import { Restaurant } from '@/services/restaurantService';
 import { getAllRestaurants, searchRestaurants } from '@/services/restaurantService';
-import { AppSearchProvider } from '@/contexts/MyNewSearch';
 
 export default function Home() {
-  return (
-    <PiAuthProvider autoAuth={true}>
-      <HomeContent />
-    </PiAuthProvider>
-  );
-}
+  const [restaurants, setRestaurants] = React.useState<Restaurant[]>([]);
 
-function HomeContent() {
-  const { user } = usePiAuth();
-  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
-  const [filteredRestaurants, setFilteredRestaurants] = useState<Restaurant[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    loadRestaurants();
+  React.useEffect(() => {
+    setRestaurants(getAllRestaurants());
   }, []);
 
-  const loadRestaurants = async () => {
-    try {
-      setIsLoading(true);
-      const data = await getAllRestaurants();
-      setRestaurants(data);
-      setFilteredRestaurants(data);
-    } catch (error) {
-      console.error('Failed to load restaurants:', error);
-    } finally {
-      setIsLoading(false);
-    }
+  const handleSearch = (term: string) => {
+    setRestaurants(searchRestaurants(term));
   };
-
-  const handleSearch = async (searchTerm: string) => {
-    if (!searchTerm.trim()) {
-      setFilteredRestaurants(restaurants);
-      return;
-    }
-
-    try {
-      const results = await searchRestaurants(searchTerm);
-      setFilteredRestaurants(results);
-    } catch (error) {
-      console.error('Search failed:', error);
-      // 搜索失败时显示所有餐厅
-      setFilteredRestaurants(restaurants);
-    }
-  };
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[calc(100vh-200px)]">
-        <div className="text-white">Loading map...</div>
-      </div>
-    );
-  }
 
   return (
-    <SearchProvider onSearch={handleSearch}>
-      <div className="w-full h-[calc(100vh-200px)] relative">
-        <RestaurantMap
-          restaurants={filteredRestaurants}
-          onMarkerClick={(restaurant) => {
-            console.log('Restaurant clicked:', restaurant);
-          }}
-        />
-      </div>
-    </SearchProvider>
+    <AppSearchProvider onSearch={handleSearch}>
+      <main className="min-h-screen">
+        <Header />
+        <div className="p-4">
+          <RestaurantMap restaurants={restaurants} />
+        </div>
+      </main>
+    </AppSearchProvider>
   );
 }
-import { AppSearchProvider } from '@/contexts/AppSearch';
-
+// 注意：確保這後面沒有任何東西了！
