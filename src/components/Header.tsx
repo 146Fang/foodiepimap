@@ -6,13 +6,13 @@ import { useLocale } from '@/contexts/LocaleContext';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { Logo } from './Logo';
 // 將 SearchLibContext 改為 AppSearchProvider (或是你在 AppSearch.tsx 裡定義的名字)
-import { AppSearchProvider } from '@/contexts/AppSearch';
+import { AppSearchContext } from '@/contexts/AppSearch';
 
 interface HeaderProps {
   onSearch?: (searchTerm: string) => void;
 }
 
-export function Header({ onSearch }: HeaderProps) {
+export function Header ({ onSearch }: HeaderProps) {
   const { t } = useLocale();
   const [searchTerm, setSearchTerm] = useState('');
   
