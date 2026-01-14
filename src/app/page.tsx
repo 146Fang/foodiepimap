@@ -12,7 +12,13 @@ export default function Home() {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
 
   useEffect(() => {
-    setRestaurants(getAllRestaurants());
+    // 建立一個內部非同步函數來處理 Promise
+    const loadData = async () => {
+      const data = await getAllRestaurants(); // 等待資料抓取完成
+      setRestaurants(data); // 抓到資料後再更新 State
+    };
+    
+    loadData();
   }, []);
 
   const handleSearch = (term: string) => {
