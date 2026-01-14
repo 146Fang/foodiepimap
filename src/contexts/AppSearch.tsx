@@ -6,8 +6,7 @@ interface AppSearchType {
   setSearchTerm: (term: string) => void;
 }
 
-// 徹底改名為 AppSearchStore
-export const AppSearchStore = createContext<AppSearchType | undefined>(undefined);
+export const AppSearchContext = createContext<AppSearchType | undefined>(undefined);
 
 export function AppSearchProvider({ children, onSearch }: { children: React.ReactNode; onSearch: (term: string) => void }) {
   const [searchTerm, setSearchTerm] = useState('');
@@ -18,14 +17,14 @@ export function AppSearchProvider({ children, onSearch }: { children: React.Reac
   };
 
   return (
-    <AppSearchStore.Provider value={{ searchTerm, setSearchTerm: updateSearch }}>
+    <AppSearchContext.Provider value={{ searchTerm, setSearchTerm: updateSearch }}>
       {children}
-    </AppSearchStore.Provider>
+    </AppSearchContext.Provider>
   );
 }
 
 export const useAppSearch = () => {
-  const context = useContext(AppSearchStore);
+  const context = useContext(AppSearchContext);
   if (!context) throw new Error('useAppSearch must be used within AppSearchProvider');
   return context;
 };

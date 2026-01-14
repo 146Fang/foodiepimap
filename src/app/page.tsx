@@ -1,16 +1,15 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
-import { AppSearchProvider } from '@/contexts/AppSearch'; // 確保這裡只有一行
+import { AppSearchProvider } from '@/contexts/AppSearch';
 import RestaurantMap from '@/components/RestaurantMap';
-import { Restaurant } from '@/services/restaurantService';
-import { getAllRestaurants, searchRestaurants } from '@/services/restaurantService';
+import { getAllRestaurants, searchRestaurants, Restaurant } from '@/services/restaurantService';
 
 export default function Home() {
-  const [restaurants, setRestaurants] = React.useState<Restaurant[]>([]);
+  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setRestaurants(getAllRestaurants());
   }, []);
 
@@ -29,4 +28,3 @@ export default function Home() {
     </AppSearchProvider>
   );
 }
-// 注意：確保這後面沒有任何東西了！
