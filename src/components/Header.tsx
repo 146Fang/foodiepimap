@@ -5,7 +5,7 @@ import { Search } from 'lucide-react';
 import { useLocale } from '@/contexts/LocaleContext';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { Logo } from './Logo';
-// 這裡確保導入的是 AppSearchContext
+// 這裡確保導入名稱與下方 useContext 一致
 import { AppSearchContext } from '@/contexts/AppSearch';
 
 interface HeaderProps {
@@ -16,13 +16,13 @@ export function Header({ onSearch }: HeaderProps) {
   const { t } = useLocale();
   const [searchTerm, setSearchTerm] = useState('');
   
-  // 使用正確的 Context 名稱
+  // 修正：使用 AppSearchContext 而非不存在的 SearchContext
   const searchContext = useContext(AppSearchContext);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // 優先使用 Props 傳進來的 onSearch，如果沒有則使用 Context 的
+    // 優先使用 Props 的 onSearch，否則使用 Context 的
     const finalOnSearch = onSearch || searchContext?.onSearch;
     
     if (finalOnSearch) {
