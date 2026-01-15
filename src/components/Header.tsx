@@ -7,18 +7,14 @@ import { LanguageSwitcher } from './LanguageSwitcher';
 import { Logo } from './Logo';
 import { AppSearchContext } from '@/contexts/AppSearch';
 
-interface HeaderProps {
-  onSearch?: (searchTerm: string) => void;
-}
-
-export function Header({ onSearch }: HeaderProps) {
+export function Header({ onSearch }: { onSearch?: (term: string) => void }) {
   const { t } = useLocale();
   const [searchTerm, setSearchTerm] = useState('');
+  // 必須與導入名稱完全一致
   const searchContext = useContext(AppSearchContext);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // 優先順序：Props 傳入的 > Context 提供的
     const finalOnSearch = onSearch || searchContext?.onSearch;
     if (finalOnSearch) {
       finalOnSearch(searchTerm);
@@ -27,7 +23,7 @@ export function Header({ onSearch }: HeaderProps) {
 
   return (
     <header className="bg-white border-b sticky top-0 z-50">
-      <div className="max-w-7xl auto px-4 h-16 flex items-center justify-between gap-4">
+      <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
         <Logo />
         <form onSubmit={handleSubmit} className="flex-1 max-w-md relative">
           <input
