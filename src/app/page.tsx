@@ -1,5 +1,5 @@
 'use client';
-
+export const dynamic = 'force-dynamic'; // 加入這一行
 import React, { useState, useEffect } from 'react';
 import { Header } from '@/components/Header'; 
 import { AppSearchProvider } from '@/contexts/AppSearch'; 
@@ -11,7 +11,7 @@ export default function Home() {
 
   useEffect(() => {
     const loadData = async () => {
-      const data = await getAllRestaurants();
+      const data = await getAllRestaurants ();
       setRestaurants(data);
     };
     loadData();
