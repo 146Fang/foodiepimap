@@ -6,7 +6,7 @@ interface AppSearchType {
   setSearchTerm: (term: string) => void;
 }
 
-export const AppSearchContext = createContext<AppSearchType | undefined>(undefined);
+export const AppSearchContext = createContext<AppSearchContextType | undefined>(undefined);
 
 export function AppSearchProvider({ children, onSearch }: { children: React.ReactNode; onSearch: (term: string) => void }) {
   const [searchTerm, setSearchTerm] = useState('');
