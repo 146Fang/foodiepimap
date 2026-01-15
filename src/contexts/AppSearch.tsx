@@ -1,23 +1,32 @@
 'use client';
 import React, { createContext, useContext, useState } from 'react';
 
-interface AppSearchType {
+interface AppSearchContextType {
   searchTerm: string;
   setSearchTerm: (term: string) => void;
+  onSearch?: (term: string) => void;
 }
 
 export const AppSearchContext = createContext<AppSearchContextType | undefined>(undefined);
 
-export function AppSearchProvider({ children, onSearch }: { children: React.ReactNode; onSearch: (term: string) => void }) {
+export function AppSearchProvider({ 
+  children, 
+  onSearch 
+}: { 
+  children: React.ReactNode; 
+  onSearch: (term: string) => void;
+}) {
   const [searchTerm, setSearchTerm] = useState('');
 
   const updateSearch = (term: string) => {
     setSearchTerm(term);
-    onSearch(term);
+    if (onSearch) {
+      onSearch(term);
+    }
   };
 
   return (
-    <AppSearchContext.Provider value={{ searchTerm, setSearchTerm: updateSearch }}>
+    <AppSearchContext.Provider value={{ searchTerm, setSearchTerm: updateSearch, onSearch }}>
       {children}
     </AppSearchContext.Provider>
   );

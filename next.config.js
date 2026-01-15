@@ -9,6 +9,8 @@ const nextConfig = {
         hostname: '**.firebasestorage.googleapis.com',
       },
     ],
+    // 允许未优化的图片（用于本地图片）
+    unoptimized: false,
   },
   // 安全配置
   async headers() {

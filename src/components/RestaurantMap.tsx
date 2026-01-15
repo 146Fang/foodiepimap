@@ -51,14 +51,21 @@ export function RestaurantMap({
     setSelectedRestaurant(null);
   };
 
-  // 创建自定义标记图标（绿色 Logo）
+  // 创建自定义标记图标（绿色 Logo - 使用图片）
   const customMarkerIcon = useMemo(() => {
     if (typeof window === 'undefined' || !window.google) {
       return undefined;
     }
     
+    // 优先使用图片，如果不存在则使用 SVG
+    const iconUrl = '/logo-green.png';
+    
     return {
-      url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+      url: iconUrl,
+      scaledSize: new window.google.maps.Size(40, 48),
+      anchor: new window.google.maps.Point(20, 48),
+      // SVG 后备方案
+      fallbackUrl: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
         <svg width="40" height="48" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
           <path d="M50 10 L35 25 L30 30 L25 35 L20 40 L20 45 L25 50 L30 45 L35 40 L40 35 L45 30 L50 25 L55 30 L60 35 L65 40 L70 45 L75 50 L80 45 L80 40 L75 35 L70 30 L65 25 Z" fill="#22c55e" stroke="white" stroke-width="2"/>
           <path d="M50 50 L30 70 L30 85 L50 110 L70 85 L70 70 Z" fill="#22c55e" stroke="white" stroke-width="2"/>
@@ -78,8 +85,6 @@ export function RestaurantMap({
           </g>
         </svg>
       `),
-      scaledSize: new window.google.maps.Size(40, 48),
-      anchor: new window.google.maps.Point(20, 48),
     };
   }, []);
 
